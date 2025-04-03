@@ -5,7 +5,9 @@
 //  Created by Devin Roth on 2025-04-03.
 //
 
-struct AudioFileSettings {
+import Foundation
+
+public struct AudioFileSettings {
     let sampleRate: SampleRate
     let bitDepth: BitDepth
     let fileFormat: FileFormat
@@ -27,32 +29,4 @@ struct AudioFileSettings {
     }
 }
 
-enum SampleRate: Double {
-    case kHz8 = 8000
-    case kHz16 = 16000
-    case kHz24 = 24000
-    case kHz44 = 44100
-    case kHz48 = 48000
-}
-
-enum BitDepth {
-    case int16
-    case int24
-    case float32
-}
-
-enum FileFormat: String {
-    case aac
-    case mp3
-    case wav
-    case aiff
-    case flac
-    case alac = "m4a"
-}
-
-extension FileFormat: CaseIterable {}
-
-enum ChannelFormat {
-    case mono
-    case stereo
-}
+extension AudioFileSettings: Sendable {}
