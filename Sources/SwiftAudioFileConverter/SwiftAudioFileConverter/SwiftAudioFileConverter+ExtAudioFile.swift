@@ -195,7 +195,7 @@ extension SwiftAudioFileConverter {
     }
     
     /// Throws a Swift error if the OSStatus indicates failure.
-    private static func checkError(_ status: OSStatus) throws {
+    static func checkError(_ status: OSStatus) throws {
         guard status == noErr else {
             throw SwiftAudioFileConverterError.coreAudioError(CoreAudioError(status: status))
         }

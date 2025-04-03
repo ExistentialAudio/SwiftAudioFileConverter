@@ -27,7 +27,8 @@ let package = Package(
         ),
         .testTarget(
             name: "SwiftAudioFileConverterTests",
-            dependencies: ["SwiftAudioFileConverter"]
+            dependencies: ["SwiftAudioFileConverter"],
+            swiftSettings: [.interoperabilityMode(.Cxx)]
         ),
     ]
 )
