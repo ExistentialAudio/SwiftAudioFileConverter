@@ -12,14 +12,18 @@ let package = Package(
             name: "SwiftAudioFileConverter",
             targets: ["SwiftAudioFileConverter"]),
     ],
-//    dependencies: [
-//    .package(url: "https://github.com/ExistentialAudio/swift-lame.git", .upToNextMajor(from: "3.100.0"))
-//    ],
+    dependencies: [
+    .package(url: "https://github.com/Phisto/swift-lame.git", .upToNextMajor(from: "3.100.0"))
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "SwiftAudioFileConverter"),
+            name: "SwiftAudioFileConverter",
+            dependencies: [
+                .product(name: "lame", package: "swift-lame")
+            ]
+        ),
         .testTarget(
             name: "SwiftAudioFileConverterTests",
             dependencies: ["SwiftAudioFileConverter"]
