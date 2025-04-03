@@ -22,7 +22,8 @@ let package = Package(
             name: "SwiftAudioFileConverter",
             dependencies: [
                 .product(name: "lame", package: "swift-lame")
-            ]
+            ],
+            swiftSettings: [.interoperabilityMode(.Cxx)]
         ),
         .testTarget(
             name: "SwiftAudioFileConverterTests",

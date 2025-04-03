@@ -10,7 +10,7 @@ import AudioToolbox
 extension SwiftAudioFileConverter {
     // MARK: - Core conversion using AudioToolbox
     
-    static func performAudioToolboxConversion(from inputURL: URL,
+    static func performExtAudioFileConversion(from inputURL: URL,
                                                       to outputURL: URL,
                                                       settings: AudioFileSettings) async throws {
         

@@ -1,16 +1,14 @@
 //
-//  SwiftAudioFileConverter+LAME.swift
+//  SwiftAudioFileConverter+FLAC.swift
 //  SwiftAudioFileConverter
 //
 //  Created by Devin Roth on 2025-04-03.
 //
-
 import Foundation
-import lame
 
 extension SwiftAudioFileConverter {
     
-    static func performLameConversion(
+    static func performFlacConversion(
         from inputURL: URL,
         to outputURL: URL,
         settings: AudioFileSettings
