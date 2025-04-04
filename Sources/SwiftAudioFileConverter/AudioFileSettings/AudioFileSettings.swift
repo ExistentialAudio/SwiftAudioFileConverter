@@ -17,7 +17,7 @@ public struct AudioFileSettings {
         return fileFormat == .aiff || fileFormat == .wav
     }
     
-    init(sampleRate: SampleRate, bitDepth: BitDepth, fileFormat: FileFormat, channelFormat: ChannelFormat) throws {
+    public init(sampleRate: SampleRate, bitDepth: BitDepth, fileFormat: FileFormat, channelFormat: ChannelFormat) throws {
         self.sampleRate = sampleRate
         self.bitDepth = bitDepth
         self.fileFormat = fileFormat
