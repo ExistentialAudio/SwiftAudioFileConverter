@@ -6,7 +6,7 @@
 //
 
 
-enum ChannelFormat {
+public enum ChannelFormat {
     case mono
     case stereo
 }
