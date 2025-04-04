@@ -16,4 +16,5 @@ public enum SwiftAudioFileConverterError: Error {
     case fileIsNotWritable(URL)
     case unsupportedConversion(FileFormat)
     case coreAudioError(CoreAudioError)
+    case flacConversionUnknownError
 }

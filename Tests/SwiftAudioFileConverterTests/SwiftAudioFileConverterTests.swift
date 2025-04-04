@@ -7,11 +7,11 @@ import Testing
     let settings = try AudioFileSettings(
         sampleRate: .kHz48,
         bitDepth: .float32,
-        fileFormat: .mp3,
+        fileFormat: .flac,
         channelFormat: .stereo)
     
     let inputURL = URL.desktopDirectory.appending(path: "dipper.wav")
-    let outputURL = URL.desktopDirectory.appending(path: "dipper.mp3")
+    let outputURL = URL.desktopDirectory.appending(path: "dipper.flac")
     
     try await SwiftAudioFileConverter.convert(
         from: inputURL,
