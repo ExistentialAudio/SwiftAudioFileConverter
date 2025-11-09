@@ -4,10 +4,11 @@
 //
 //  Created by Devin Roth on 2025-04-03.
 //
+
 import Foundation
 import AudioToolbox
 
-public enum CoreAudioError {
+public enum CoreAudioError: LocalizedError {
     case formatNotSupported
     case unspecified
     case unsupportedProperty
@@ -16,8 +17,7 @@ public enum CoreAudioError {
     case unknownFormat
     case unknownError(OSStatus)
     
-    init(status: OSStatus) {
-        
+    public init(status: OSStatus) {
         switch status {
         case kAudioFormatUnsupportedDataFormatError:
             self = .formatNotSupported
@@ -34,9 +34,32 @@ public enum CoreAudioError {
         default:
             self = .unknownError(status)
         }
-        
-        
     }
 }
 
-extension CoreAudioError: Sendable {}
+extension CoreAudioError: Equatable { }
+
+extension CoreAudioError: Hashable { }
+
+extension CoreAudioError: Sendable { }
+
+extension CoreAudioError {
+    public var errorDescription: String? {
+        switch self {
+        case .formatNotSupported:
+            "Format not supported."
+        case .unspecified:
+            "Unspecified error."
+        case .unsupportedProperty:
+            "Unsupported property."
+        case .badPropertySize:
+            "Bad property size."
+        case .badSpecifierSize:
+            "Bad specifier size."
+        case .unknownFormat:
+            "Unknown format."
+        case let .unknownError(osStatus):
+            "Unknown error (OSStatus \(osStatus))"
+        }
+    }
+}

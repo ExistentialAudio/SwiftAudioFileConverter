@@ -4,8 +4,8 @@
 //
 //  Created by Devin Roth on 2025-04-03.
 //
-import Foundation
 
+import Foundation
 
 public enum FileFormat: String {
     case aac
@@ -15,5 +15,11 @@ public enum FileFormat: String {
     case flac
     case alac = "m4a"
 }
-extension FileFormat: Sendable {}
-extension FileFormat: CaseIterable {}
+
+extension FileFormat: Equatable { }
+
+extension FileFormat: Hashable { }
+
+extension FileFormat: Sendable { }
+
+extension FileFormat: CaseIterable { }

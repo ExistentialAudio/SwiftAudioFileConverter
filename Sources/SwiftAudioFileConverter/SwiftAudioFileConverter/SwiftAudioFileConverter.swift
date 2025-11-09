@@ -1,11 +1,20 @@
+//
+//  SwiftAudioFileConverter.swift
+//  SwiftAudioFileConverter
+//
+//  Created by Devin Roth on 2025-04-03.
+//
+
 import Foundation
 import AudioToolbox
 
-public actor SwiftAudioFileConverter {
-    static public func convert(from inputURL: URL,
-                        to outputURL: URL,
-                        with settings: AudioFileSettings) async throws {
-        
+public enum SwiftAudioFileConverter {
+    /// Perform audio file conversion.
+    @concurrent nonisolated static public func convert(
+        from inputURL: URL,
+        to outputURL: URL,
+        with settings: AudioFileSettings
+    ) async throws {
         // Check if the input file extension is a known audio format
         guard FileFormat.allCases.map(\.rawValue).contains(inputURL.pathExtension.lowercased()) else {
             throw SwiftAudioFileConverterError.unsupportedAudioFileExtension(inputURL)
@@ -17,14 +26,14 @@ public actor SwiftAudioFileConverter {
         }
         
         // Check write permissions on the output (directory must be writable)
-        //    NOTE: For a brand new file, isWritableFile(atPath:) can be misleading.
+        //    NOTE: For a brand new file, `isWritableFile(atPath:)` can be misleading.
         //    Often, you'll want to check if the directory is writable instead.
         let outputDirectory = outputURL.deletingLastPathComponent()
         guard FileManager.default.isWritableFile(atPath: outputDirectory.path) else {
             throw SwiftAudioFileConverterError.fileIsNotWritable(outputURL)
         }
         
-        // Check if output extension matches settings.fileFormat
+        // Check if output extension matches `settings.fileFormat`
         guard outputURL.pathExtension.lowercased() == settings.fileFormat.rawValue else {
             throw SwiftAudioFileConverterError.audioFileExtensionSettingsMismatch(outputURL, settings)
         }
