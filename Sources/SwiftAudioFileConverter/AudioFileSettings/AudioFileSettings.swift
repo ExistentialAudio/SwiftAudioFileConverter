@@ -8,14 +8,10 @@
 import Foundation
 
 public struct AudioFileSettings {
-    let sampleRate: SampleRate
-    let bitDepth: BitDepth
-    let fileFormat: FileFormat
-    let channelFormat: ChannelFormat
-    
-    var isPCM: Bool {
-        return fileFormat == .aiff || fileFormat == .wav
-    }
+    public let sampleRate: SampleRate
+    public let bitDepth: BitDepth
+    public let fileFormat: FileFormat
+    public let channelFormat: ChannelFormat
     
     public init(sampleRate: SampleRate, bitDepth: BitDepth, fileFormat: FileFormat, channelFormat: ChannelFormat) throws {
         self.sampleRate = sampleRate
@@ -23,10 +19,22 @@ public struct AudioFileSettings {
         self.fileFormat = fileFormat
         self.channelFormat = channelFormat
         
-        if !isPCM && bitDepth != .float32 {
+        if !isPCM, bitDepth != .float32 {
             throw SwiftAudioFileConverterError.invalidAudioFileSettings(self)
         }
     }
 }
 
-extension AudioFileSettings: Sendable {}
+extension AudioFileSettings: Equatable { }
+
+extension AudioFileSettings: Hashable { }
+
+extension AudioFileSettings: Sendable { }
+
+// MARK: - Properties
+
+extension AudioFileSettings {
+    public var isPCM: Bool {
+        fileFormat == .aiff || fileFormat == .wav
+    }
+}
