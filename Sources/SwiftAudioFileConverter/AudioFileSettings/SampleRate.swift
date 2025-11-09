@@ -22,3 +22,9 @@ extension SampleRate: Hashable { }
 extension SampleRate: Sendable { }
 
 extension SampleRate: CaseIterable { }
+
+extension SampleRate: CustomStringConvertible {
+    public var description: String {
+        "\(rawValue)Hz"
+    }
+}

@@ -31,6 +31,12 @@ extension AudioFileSettings: Hashable { }
 
 extension AudioFileSettings: Sendable { }
 
+extension AudioFileSettings: CustomStringConvertible {
+    public var description: String {
+        "\(fileFormat) \(channelFormat) @ \(sampleRate)/\(bitDepth)"
+    }
+}
+
 // MARK: - Properties
 
 extension AudioFileSettings {
