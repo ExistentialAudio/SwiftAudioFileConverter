@@ -2,8 +2,12 @@ import Foundation
 import Testing
 @testable import SwiftAudioFileConverter
 
+@available(macOS 13.0, *)
+@available(iOS, unavailable)
+@available(tvOS, unavailable)
+@available(watchOS, unavailable)
+@available(visionOS, unavailable)
 @Test func example() async throws {
-    
     let settings = try AudioFileSettings(
         sampleRate: .kHz48,
         bitDepth: .float32,
