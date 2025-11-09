@@ -11,7 +11,7 @@ import Foundation
 extension SwiftAudioFileConverter {
     // MARK: - Core conversion using AudioToolbox
 
-    static func performExtAudioFileConversion(
+    @concurrent nonisolated static func performExtAudioFileConversion(
         from inputURL: URL,
         to outputURL: URL,
         settings: AudioFileSettings
@@ -122,7 +122,7 @@ extension SwiftAudioFileConverter {
 
     /// Returns a tuple of (destination AudioStreamBasicDescription, destination AudioFileTypeID)
     /// based on the user’s desired FileFormat in `AudioFileSettings`.
-    private static func audioFormat(
+    nonisolated private static func audioFormat(
         for settings: AudioFileSettings
     ) throws -> (AudioStreamBasicDescription, AudioFileTypeID) {
         let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
@@ -174,7 +174,7 @@ extension SwiftAudioFileConverter {
     }
 
     /// Sets the correct flags for linear PCM based on requested bit depth.
-    private static func linearPCMFlags(for bitDepth: BitDepth) -> UInt32 {
+    nonisolated private static func linearPCMFlags(for bitDepth: BitDepth) -> UInt32 {
         // Common flags for linear PCM
         var flags: UInt32 = kLinearPCMFormatFlagIsPacked
         switch bitDepth {
@@ -187,7 +187,7 @@ extension SwiftAudioFileConverter {
     }
 
     /// Returns the bit depth in bits (e.g. 16, 24, 32) for the enum
-    private static func bitDepthBits(_ bitDepth: BitDepth) -> UInt32 {
+    nonisolated private static func bitDepthBits(_ bitDepth: BitDepth) -> UInt32 {
         switch bitDepth {
         case .int16:
             return 16
@@ -200,7 +200,7 @@ extension SwiftAudioFileConverter {
     }
 
     /// Throws a Swift error if the OSStatus indicates failure.
-    static func checkError(_ status: OSStatus) throws {
+    nonisolated static func checkError(_ status: OSStatus) throws {
         guard status == noErr else {
             throw SwiftAudioFileConverterError.coreAudioError(CoreAudioError(status: status))
         }

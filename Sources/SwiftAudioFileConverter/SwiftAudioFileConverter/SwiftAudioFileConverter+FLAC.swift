@@ -10,7 +10,7 @@ import FLAC
 import Foundation
 
 extension SwiftAudioFileConverter {
-    static func performFlacConversion(
+    @concurrent nonisolated static func performFlacConversion(
         from inputURL: URL,
         to outputURL: URL,
         settings: AudioFileSettings

@@ -10,7 +10,7 @@ import Foundation
 import lame
 
 extension SwiftAudioFileConverter {
-    static func performLameConversion(
+    @concurrent nonisolated static func performLameConversion(
         from inputURL: URL,
         to outputURL: URL,
         settings: AudioFileSettings

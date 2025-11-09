@@ -8,9 +8,9 @@
 import Foundation
 import AudioToolbox
 
-public actor SwiftAudioFileConverter {
+public enum SwiftAudioFileConverter {
     /// Perform audio file conversion.
-    static public func convert(
+    @concurrent nonisolated static public func convert(
         from inputURL: URL,
         to outputURL: URL,
         with settings: AudioFileSettings
