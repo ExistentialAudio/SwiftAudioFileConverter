@@ -1,5 +1,5 @@
 //
-//  SwiftAudioFileConverter+LAME.swift
+//  AudioFileConverter+LAME.swift
 //  SwiftAudioFileConverter
 //
 //  Created by Devin Roth on 2025-04-03.
@@ -9,7 +9,7 @@ import AudioToolbox
 import Foundation
 import lame
 
-extension SwiftAudioFileConverter {
+extension AudioFileConverter {
     @concurrent nonisolated static func performLameConversion(
         from inputURL: URL,
         to outputURL: URL,

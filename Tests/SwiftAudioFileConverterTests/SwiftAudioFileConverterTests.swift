@@ -18,7 +18,7 @@ import Testing
     let inputURL = URL.desktopDirectory.appending(path: "test.wav")
     let outputURL = URL.desktopDirectory.appending(path: "test.flac")
     
-    try await SwiftAudioFileConverter.convert(
+    try await AudioFileConverter.convert(
         from: inputURL,
         to: outputURL,
         with: settings

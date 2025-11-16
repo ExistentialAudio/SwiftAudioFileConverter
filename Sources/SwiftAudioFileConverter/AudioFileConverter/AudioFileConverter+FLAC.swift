@@ -1,5 +1,5 @@
 //
-//  SwiftAudioFileConverter+FLAC.swift
+//  AudioFileConverter+FLAC.swift
 //  SwiftAudioFileConverter
 //
 //  Created by Devin Roth on 2025-04-03.
@@ -9,7 +9,7 @@ import AudioToolbox
 import FLAC
 import Foundation
 
-extension SwiftAudioFileConverter {
+extension AudioFileConverter {
     @concurrent nonisolated static func performFlacConversion(
         from inputURL: URL,
         to outputURL: URL,

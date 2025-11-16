@@ -1,5 +1,5 @@
 //
-//  SwiftAudioFileConverter.swift
+//  AudioFileConverter.swift
 //  SwiftAudioFileConverter
 //
 //  Created by Devin Roth on 2025-04-03.
@@ -8,7 +8,7 @@
 import Foundation
 import AudioToolbox
 
-public enum SwiftAudioFileConverter {
+public enum AudioFileConverter {
     /// Perform audio file conversion.
     @concurrent nonisolated static public func convert(
         from inputURL: URL,

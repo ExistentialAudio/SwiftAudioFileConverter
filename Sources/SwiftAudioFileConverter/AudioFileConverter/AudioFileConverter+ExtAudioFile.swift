@@ -1,5 +1,5 @@
 //
-//  SwiftAudioFileConverter+ExtAudioFile.swift
+//  AudioFileConverter+ExtAudioFile.swift
 //  SwiftAudioFileConverter
 //
 //  Created by Devin Roth on 2025-04-03.
@@ -8,7 +8,7 @@
 import AudioToolbox
 import Foundation
 
-extension SwiftAudioFileConverter {
+extension AudioFileConverter {
     // MARK: - Core conversion using AudioToolbox
 
     @concurrent nonisolated static func performExtAudioFileConversion(
