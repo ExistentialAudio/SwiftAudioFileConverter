@@ -14,14 +14,14 @@ extension AudioFileConverter {
     @concurrent nonisolated static func performExtAudioFileConversion(
         from inputURL: URL,
         to outputURL: URL,
-        settings: AudioFileSettings
+        settings: Settings
     ) async throws {
         // 1. Open the input file
         var inputFile: ExtAudioFileRef?
         var result = ExtAudioFileOpenURL(inputURL as CFURL, &inputFile)
         try checkError(result)
         guard let inputFile = inputFile else {
-            throw SwiftAudioFileConverterError.unableToOpenFile(inputURL)
+            throw ConverterError.unableToOpenFile(inputURL)
         }
 
         // 2. Prepare an AudioStreamBasicDescription for the *destination* format
@@ -42,7 +42,7 @@ extension AudioFileConverter {
 
         try checkError(result)
         guard let outputFile = outputFile else {
-            throw SwiftAudioFileConverterError.unableToOpenFile(outputURL)
+            throw ConverterError.unableToOpenFile(outputURL)
         }
 
         // 4. We’ll set a “client format” to read and write in a consistent format (e.g., float32 PCM).
@@ -50,7 +50,7 @@ extension AudioFileConverter {
         let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
 
         var clientFormat = AudioStreamBasicDescription(
-            mSampleRate: settings.sampleRate.rawValue,
+            mSampleRate: settings.sampleRate.hzDouble,
             mFormatID: kAudioFormatLinearPCM,
             mFormatFlags: kLinearPCMFormatFlagIsFloat | kLinearPCMFormatFlagIsPacked,
             mBytesPerPacket: 4 * channels,
@@ -123,13 +123,13 @@ extension AudioFileConverter {
     /// Returns a tuple of (destination AudioStreamBasicDescription, destination AudioFileTypeID)
     /// based on the user’s desired FileFormat in `AudioFileSettings`.
     nonisolated private static func audioFormat(
-        for settings: AudioFileSettings
+        for settings: Settings
     ) throws -> (AudioStreamBasicDescription, AudioFileTypeID) {
         let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
 
         // Base description; we’ll adjust for each format
         var asbd = AudioStreamBasicDescription()
-        asbd.mSampleRate = settings.sampleRate.rawValue
+        asbd.mSampleRate = settings.sampleRate.hzDouble
         asbd.mChannelsPerFrame = channels
 
         switch settings.fileFormat {
@@ -169,7 +169,7 @@ extension AudioFileConverter {
 
         case .mp3, .flac:
             // We should never get here, because we throw for unsupported
-            throw SwiftAudioFileConverterError.unsupportedConversion(settings.fileFormat)
+            throw ConverterError.unsupportedConversion(settings.fileFormat)
         }
     }
 
@@ -202,7 +202,7 @@ extension AudioFileConverter {
     /// Throws a Swift error if the OSStatus indicates failure.
     nonisolated static func checkError(_ status: OSStatus) throws {
         guard status == noErr else {
-            throw SwiftAudioFileConverterError.coreAudioError(CoreAudioError(status: status))
+            throw ConverterError.coreAudioError(CoreAudioError(status: status))
         }
     }
 }

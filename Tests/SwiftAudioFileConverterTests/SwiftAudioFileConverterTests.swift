@@ -9,7 +9,7 @@ import Testing
 @available(watchOS, unavailable)
 @available(visionOS, unavailable)
 @Test func manualConversion() async throws {
-    let settings = try AudioFileSettings(
+    let settings = try AudioFileConverter.Settings(
         sampleRate: .kHz48,
         bitDepth: .float32,
         fileFormat: .flac,

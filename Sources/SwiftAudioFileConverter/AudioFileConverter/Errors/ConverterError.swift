@@ -1,5 +1,5 @@
 //
-//  SwiftAudioFileConverterError.swift
+//  ConverterError.swift
 //  SwiftAudioFileConverter
 //
 //  Created by Devin Roth on 2025-04-03.
@@ -7,26 +7,28 @@
 
 import Foundation
 
-public enum SwiftAudioFileConverterError: LocalizedError {
-    case invalidAudioFileSettings(AudioFileSettings)
-    case unsupportedAudioFileExtension(URL)
-    case audioFileExtensionSettingsMismatch(URL, AudioFileSettings)
-    case fileDoesNotExist(URL)
-    case fileIsNotReadable(URL)
-    case unableToOpenFile(URL)
-    case fileIsNotWritable(URL)
-    case unsupportedConversion(FileFormat)
-    case coreAudioError(CoreAudioError)
-    case flacConversionUnknownError
+extension AudioFileConverter {
+    public enum ConverterError: Error {
+        case invalidAudioFileSettings(Settings)
+        case unsupportedAudioFileExtension(URL)
+        case audioFileExtensionSettingsMismatch(URL, Settings)
+        case fileDoesNotExist(URL)
+        case fileIsNotReadable(URL)
+        case unableToOpenFile(URL)
+        case fileIsNotWritable(URL)
+        case unsupportedConversion(FileFormat)
+        case coreAudioError(CoreAudioError)
+        case flacConversionUnknownError
+    }
 }
 
-extension SwiftAudioFileConverterError: Equatable { }
+extension AudioFileConverter.ConverterError: Equatable { }
 
-extension SwiftAudioFileConverterError: Hashable { }
+extension AudioFileConverter.ConverterError: Hashable { }
 
-extension SwiftAudioFileConverterError: Sendable { }
+extension AudioFileConverter.ConverterError: Sendable { }
 
-extension SwiftAudioFileConverterError {
+extension AudioFileConverter.ConverterError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case let .invalidAudioFileSettings(audioFileSettings):

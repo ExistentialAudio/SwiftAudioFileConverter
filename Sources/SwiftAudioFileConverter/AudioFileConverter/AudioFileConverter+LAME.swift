@@ -13,14 +13,14 @@ extension AudioFileConverter {
     @concurrent nonisolated static func performLameConversion(
         from inputURL: URL,
         to outputURL: URL,
-        settings: AudioFileSettings
+        settings: Settings
     ) async throws {
         // 1) Open the input file using ExtAudioFile
         var inputFile: ExtAudioFileRef?
         var result = ExtAudioFileOpenURL(inputURL as CFURL, &inputFile)
         try checkError(result)
         guard let inputFile = inputFile else {
-            throw SwiftAudioFileConverterError.unableToOpenFile(inputURL)
+            throw ConverterError.unableToOpenFile(inputURL)
         }
         defer {
             ExtAudioFileDispose(inputFile)
@@ -32,7 +32,7 @@ extension AudioFileConverter {
         // 3) We want 32-bit float interleaved PCM for reading from ExtAudioFile
         //    Build a client format describing float PCM.
         var clientFormat = AudioStreamBasicDescription(
-            mSampleRate: settings.sampleRate.rawValue,
+            mSampleRate: settings.sampleRate.hzDouble,
             mFormatID: kAudioFormatLinearPCM,
             mFormatFlags: kLinearPCMFormatFlagIsFloat
                 | kAudioFormatFlagsNativeEndian
@@ -56,10 +56,10 @@ extension AudioFileConverter {
 
         // 4) Prepare LAME for float input
         guard let lame = lame_init() else {
-            throw SwiftAudioFileConverterError.unsupportedConversion(.mp3)
+            throw ConverterError.unsupportedConversion(.mp3)
         }
         lame_set_num_channels(lame, Int32(channels))
-        lame_set_in_samplerate(lame, Int32(settings.sampleRate.rawValue))
+        lame_set_in_samplerate(lame, Int32(settings.sampleRate.hzInt))
 
         // Example settings:
         lame_set_brate(lame, 128) // 128 kbps
@@ -67,7 +67,7 @@ extension AudioFileConverter {
 
         if lame_init_params(lame) < 0 {
             lame_close(lame)
-            throw SwiftAudioFileConverterError.unsupportedConversion(.mp3)
+            throw ConverterError.unsupportedConversion(.mp3)
         }
         defer { lame_close(lame) }
 
@@ -77,10 +77,10 @@ extension AudioFileConverter {
             try fileManager.removeItem(at: outputURL)
         }
         guard fileManager.createFile(atPath: outputURL.path, contents: nil) else {
-            throw SwiftAudioFileConverterError.fileIsNotWritable(outputURL)
+            throw ConverterError.fileIsNotWritable(outputURL)
         }
         guard let fileHandle = FileHandle(forWritingAtPath: outputURL.path) else {
-            throw SwiftAudioFileConverterError.fileIsNotWritable(outputURL)
+            throw ConverterError.fileIsNotWritable(outputURL)
         }
         defer { try? fileHandle.close() }
 
@@ -156,7 +156,7 @@ extension AudioFileConverter {
             }
 
             if encodedBytes < 0 {
-                throw SwiftAudioFileConverterError.unsupportedConversion(.mp3)
+                throw ConverterError.unsupportedConversion(.mp3)
             }
 
             // 6d) Write the MP3 bytes to the output file

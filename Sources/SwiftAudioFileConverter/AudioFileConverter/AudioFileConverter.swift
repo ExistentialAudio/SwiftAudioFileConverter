@@ -13,16 +13,16 @@ public enum AudioFileConverter {
     @concurrent nonisolated static public func convert(
         from inputURL: URL,
         to outputURL: URL,
-        with settings: AudioFileSettings
+        with settings: Settings
     ) async throws {
         // Check if the input file extension is a known audio format
         guard FileFormat.allCases.map(\.rawValue).contains(inputURL.pathExtension.lowercased()) else {
-            throw SwiftAudioFileConverterError.unsupportedAudioFileExtension(inputURL)
+            throw ConverterError.unsupportedAudioFileExtension(inputURL)
         }
         
         // Check read permissions on the input file
         guard FileManager.default.isReadableFile(atPath: inputURL.path) else {
-            throw SwiftAudioFileConverterError.fileIsNotReadable(inputURL)
+            throw ConverterError.fileIsNotReadable(inputURL)
         }
         
         // Check write permissions on the output (directory must be writable)
@@ -30,12 +30,12 @@ public enum AudioFileConverter {
         //    Often, you'll want to check if the directory is writable instead.
         let outputDirectory = outputURL.deletingLastPathComponent()
         guard FileManager.default.isWritableFile(atPath: outputDirectory.path) else {
-            throw SwiftAudioFileConverterError.fileIsNotWritable(outputURL)
+            throw ConverterError.fileIsNotWritable(outputURL)
         }
         
         // Check if output extension matches `settings.fileFormat`
         guard outputURL.pathExtension.lowercased() == settings.fileFormat.rawValue else {
-            throw SwiftAudioFileConverterError.audioFileExtensionSettingsMismatch(outputURL, settings)
+            throw ConverterError.audioFileExtensionSettingsMismatch(outputURL, settings)
         }
         
         // Dispatch the conversion based on the requested format

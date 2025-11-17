@@ -13,14 +13,14 @@ extension AudioFileConverter {
     @concurrent nonisolated static func performFlacConversion(
         from inputURL: URL,
         to outputURL: URL,
-        settings: AudioFileSettings
+        settings: Settings
     ) async throws {
         // 1) Open the input file with ExtAudioFile
         var inputFile: ExtAudioFileRef?
         var result = ExtAudioFileOpenURL(inputURL as CFURL, &inputFile)
         try checkError(result)
         guard let inputFile = inputFile else {
-            throw SwiftAudioFileConverterError.unableToOpenFile(inputURL)
+            throw ConverterError.unableToOpenFile(inputURL)
         }
         defer { ExtAudioFileDispose(inputFile) }
 
@@ -30,7 +30,7 @@ extension AudioFileConverter {
         // 3) We want 16-bit interleaved PCM from ExtAudioFile
         //    because FLAC expects integer samples
         var clientFormat = AudioStreamBasicDescription(
-            mSampleRate: settings.sampleRate.rawValue,
+            mSampleRate: settings.sampleRate.hzDouble,
             mFormatID: kAudioFormatLinearPCM,
             mFormatFlags: kAudioFormatFlagsNativeEndian
                 | kLinearPCMFormatFlagIsPacked
@@ -54,14 +54,14 @@ extension AudioFileConverter {
 
         // 4) Create and configure the FLAC encoder
         guard let flacEncoder = FLAC__stream_encoder_new() else {
-            throw SwiftAudioFileConverterError.unsupportedConversion(.flac)
+            throw ConverterError.unsupportedConversion(.flac)
         }
         defer { FLAC__stream_encoder_delete(flacEncoder) }
 
         // Set basic FLAC encoder properties
         // Sample rate, channels, bits per sample
         FLAC__stream_encoder_set_channels(flacEncoder, channels)
-        FLAC__stream_encoder_set_sample_rate(flacEncoder, UInt32(settings.sampleRate.rawValue))
+        FLAC__stream_encoder_set_sample_rate(flacEncoder, UInt32(settings.sampleRate.hzInt))
         FLAC__stream_encoder_set_bits_per_sample(flacEncoder, 16)
 
         // Optionally set a compression level (0 = fastest, 8 = slowest/best)
@@ -72,7 +72,7 @@ extension AudioFileConverter {
             FLAC__stream_encoder_init_file(flacEncoder, pathCstr, nil, nil)
         }
         if initStatus != FLAC__STREAM_ENCODER_INIT_STATUS_OK {
-            throw SwiftAudioFileConverterError.unsupportedConversion(.flac)
+            throw ConverterError.unsupportedConversion(.flac)
         }
 
         // 6) Read PCM in chunks, pass to FLAC
@@ -139,14 +139,14 @@ extension AudioFileConverter {
             }
 
             if ok == 0  {
-                throw SwiftAudioFileConverterError.flacConversionUnknownError
+                throw ConverterError.flacConversionUnknownError
             }
         }
 
         // 7) Finish/flush the encoder
         let finishOK = FLAC__stream_encoder_finish(flacEncoder)
         if finishOK == 0 {
-            throw SwiftAudioFileConverterError.flacConversionUnknownError
+            throw ConverterError.flacConversionUnknownError
         }
 
         // 8) The output FLAC file now exists at outputURL
