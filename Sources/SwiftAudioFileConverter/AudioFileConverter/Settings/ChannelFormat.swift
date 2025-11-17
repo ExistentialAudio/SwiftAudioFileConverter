@@ -32,3 +32,16 @@ extension AudioFileConverter.ChannelFormat: CustomStringConvertible {
         }
     }
 }
+
+// MARK: - Properties
+
+extension AudioFileConverter.ChannelFormat {
+    public var channelCount: Int {
+        switch self {
+        case .mono:
+            1
+        case .stereo:
+            2
+        }
+    }
+}

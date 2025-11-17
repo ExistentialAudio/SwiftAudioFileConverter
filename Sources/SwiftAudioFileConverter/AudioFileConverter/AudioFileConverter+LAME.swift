@@ -27,7 +27,7 @@ extension AudioFileConverter {
         }
 
         // 2) Determine the number of channels from AudioFileSettings
-        let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
+        let channels = UInt32(settings.channelFormat.channelCount)
 
         // 3) We want 32-bit float interleaved PCM for reading from ExtAudioFile
         //    Build a client format describing float PCM.

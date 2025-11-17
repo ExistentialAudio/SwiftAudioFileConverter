@@ -47,7 +47,7 @@ extension AudioFileConverter {
 
         // 4. We’ll set a “client format” to read and write in a consistent format (e.g., float32 PCM).
         //    Even for compressed output like AAC, we often use a PCM client format for reading/writing.
-        let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
+        let channels = UInt32(settings.channelFormat.channelCount)
 
         var clientFormat = AudioStreamBasicDescription(
             mSampleRate: settings.sampleRate.hzDouble,
@@ -125,7 +125,7 @@ extension AudioFileConverter {
     nonisolated private static func audioFormat(
         for settings: Settings
     ) throws -> (AudioStreamBasicDescription, AudioFileTypeID) {
-        let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
+        let channels = UInt32(settings.channelFormat.channelCount)
 
         // Base description; we’ll adjust for each format
         var asbd = AudioStreamBasicDescription()

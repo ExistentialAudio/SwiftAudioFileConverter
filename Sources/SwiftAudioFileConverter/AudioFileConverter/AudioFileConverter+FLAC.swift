@@ -27,7 +27,7 @@ extension AudioFileConverter {
         defer { ExtAudioFileDispose(inputFile) }
 
         // 2) Decide on channels from settings
-        let channels: UInt32 = (settings.channelFormat == .mono) ? 1 : 2
+        let channels = UInt32(settings.channelFormat.channelCount)
 
         // 3) We want 16-bit interleaved PCM from ExtAudioFile
         //    because FLAC expects integer samples
