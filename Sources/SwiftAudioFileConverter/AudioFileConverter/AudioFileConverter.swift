@@ -40,7 +40,6 @@ public enum AudioFileConverter {
         
         // Dispatch the conversion based on the requested format
         switch settings.fileFormat {
-            
         case .wav, .aiff, .aac, .alac:
             // ExtAudioFile supports these.
             try await performExtAudioFileConversion(from: inputURL, to: outputURL, settings: settings)

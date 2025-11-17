@@ -190,12 +190,12 @@ extension AudioFileConverter {
     nonisolated private static func bitDepthBits(_ bitDepth: BitDepth) -> UInt32 {
         switch bitDepth {
         case .int16:
-            return 16
+            16
         case .int24:
             // 24-bit is often stored in a 32-bit container, but here we use 24 directly
-            return 24
+            24
         case .float32:
-            return 32
+            32
         }
     }
 

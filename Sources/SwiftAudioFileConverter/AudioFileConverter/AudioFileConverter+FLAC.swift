@@ -10,6 +10,8 @@ import FLAC
 import Foundation
 
 extension AudioFileConverter {
+    // TODO: bit-depth is hard-coded at 16-bit
+    // TODO: add compression level parameter (0 ... 8 where higher numbers are greater compression resulting in smaller file sizes, with 5 as default)
     @concurrent nonisolated static func performFlacConversion(
         from inputURL: URL,
         to outputURL: URL,
@@ -25,7 +27,7 @@ extension AudioFileConverter {
         defer { ExtAudioFileDispose(inputFile) }
 
         // 2) Decide on channels from settings
-        let channels = (settings.channelFormat == .mono) ? UInt32(1) : UInt32(2)
+        let channels: UInt32 = (settings.channelFormat == .mono) ? 1 : 2
 
         // 3) We want 16-bit interleaved PCM from ExtAudioFile
         //    because FLAC expects integer samples
@@ -108,7 +110,7 @@ extension AudioFileConverter {
             // 6c) Convert frames to FLAC. Because we used interleaved 16-bit PCM,
             //     we can directly pass the pointer to FLAC’s process_interleaved.
 
-            let ok = withUnsafePointer(to: pcmBuffer) { ptr in
+            let isOK: FLAC__bool = withUnsafePointer(to: pcmBuffer) { ptr in
                 // FLAC__stream_encoder_process_interleaved expects a pointer to Int32 buffers
                 // but actually we can pass 16-bit if we cast. We'll do a little trick:
                 // We'll cast our Int16 pointer to int[] in FLAC's perspective.
@@ -120,25 +122,25 @@ extension AudioFileConverter {
                 //       size_t samples
                 //   );
                 //
-                // So we must convert from Int16 to Int32 or pass upcasted data.
+                // So we must convert from Int16 to Int32 or pass upcast data.
                 // A quick approach: convert each frame to 32-bit on the fly.
                 // We'll do that to avoid confusion:
 
                 var int32Buffer = [Int32](repeating: 0, count: Int(framesRead * channels))
                 for i in 0 ..< (Int(framesRead * channels)) {
-                    int32Buffer[i] = Int32(pcmBuffer[i])
+                    int32Buffer[i] = Int32(ptr.pointee[i])
                 }
-
+                
                 return int32Buffer.withUnsafeBufferPointer { bp -> FLAC__bool in
                     FLAC__stream_encoder_process_interleaved(
                         flacEncoder,
-                        bp.baseAddress,  // pointer to the 32-bit array
+                        bp.baseAddress, // pointer to the 32-bit array
                         FLAC__uint32(framesRead)
                     )
                 }
             }
 
-            if ok == 0  {
+            if isOK == 0 {
                 throw ConverterError.flacConversionUnknownError
             }
         }
