@@ -35,3 +35,18 @@ extension AudioFileConverter.BitDepth: CustomStringConvertible {
         }
     }
 }
+
+// MARK: - Properties
+
+extension AudioFileConverter.BitDepth {
+    public var bits: Int {
+        switch self {
+        case .int16:
+            16
+        case .int24:
+            24
+        case .float32:
+            32
+        }
+    }
+}
