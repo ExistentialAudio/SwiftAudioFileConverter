@@ -19,6 +19,7 @@ extension AudioFileConverter {
         case unsupportedConversion(FileFormat)
         case coreAudioError(CoreAudioError)
         case flacConversionUnknownError
+        case invalidLamePath
     }
 }
 
@@ -51,6 +52,8 @@ extension AudioFileConverter.ConverterError: LocalizedError {
             "Core Audio error: \(coreAudioError)"
         case .flacConversionUnknownError:
             "Unknown FLAC conversion error."
+        case .invalidLamePath:
+            "A valid LAME path must be supplied"
         }
     }
 }

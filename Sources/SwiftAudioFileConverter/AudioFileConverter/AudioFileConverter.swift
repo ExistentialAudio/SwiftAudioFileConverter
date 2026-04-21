@@ -13,7 +13,8 @@ public enum AudioFileConverter {
     @concurrent nonisolated static public func convert(
         from inputURL: URL,
         to outputURL: URL,
-        with settings: Settings
+        with settings: Settings,
+        lameLibraryURL: URL? = nil
     ) async throws {
         // Check if the input file extension is a known audio format
         guard FileFormat.allCases.map(\.rawValue).contains(inputURL.pathExtension.lowercased()) else {
@@ -46,7 +47,7 @@ public enum AudioFileConverter {
             
         case .mp3:
             // Use Lame for mp3
-            try await performLameConversion(from: inputURL, to: outputURL, settings: settings)
+            try await performLameConversion(from: inputURL, to: outputURL, settings: settings, lameLibraryURL: lameLibraryURL)
             
         case .flac:
             try await performFlacConversion(from: inputURL, to: outputURL, settings: settings)
