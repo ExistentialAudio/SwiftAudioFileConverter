@@ -16,7 +16,7 @@ extension AudioFileConverter {
         case flac
         case alac = "m4a"
         
-        var fileExtension: String {
+        public var fileExtension: String {
             return self.rawValue
         }
     }
