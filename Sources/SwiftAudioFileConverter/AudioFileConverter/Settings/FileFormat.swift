@@ -15,6 +15,10 @@ extension AudioFileConverter {
         case aiff
         case flac
         case alac = "m4a"
+        
+        var fileExtension: String {
+            return self.rawValue
+        }
     }
 }
 
