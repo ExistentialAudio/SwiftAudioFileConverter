@@ -9,6 +9,7 @@ import Foundation
 
 extension AudioFileConverter {
     public enum FileFormat: String {
+        case caf
         case aac
         case mp3
         case wav

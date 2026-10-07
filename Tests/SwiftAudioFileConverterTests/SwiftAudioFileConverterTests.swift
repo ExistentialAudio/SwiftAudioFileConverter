@@ -15,7 +15,10 @@ import Testing
         fileFormat: .flac,
         channelFormat: .stereo)
     
-    let inputURL = URL.desktopDirectory.appending(path: "test.wav")
+//    let inputURL = URL.desktopDirectory.appending(path: "test.wav")
+//    let outputURL = URL.desktopDirectory.appending(path: "test.flac")
+    
+    let inputURL = URL.desktopDirectory.appending(path: "test.caf")
     let outputURL = URL.desktopDirectory.appending(path: "test.flac")
     
     try await AudioFileConverter.convert(

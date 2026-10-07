@@ -154,6 +154,17 @@ extension AudioFileConverter {
             asbd.mBytesPerFrame = (asbd.mBitsPerChannel / 8) * channels
             asbd.mBytesPerPacket = asbd.mBytesPerFrame * asbd.mFramesPerPacket
             return (asbd, kAudioFileAIFCType)
+            
+        case .caf:
+            // CAF -> Linear PCM
+            asbd.mFormatID = kAudioFormatLinearPCM
+            asbd.mFormatFlags = linearPCMFlags(for: settings.bitDepth)
+            asbd.mFramesPerPacket = 1
+            asbd.mBitsPerChannel = bitDepthBits(settings.bitDepth)
+            asbd.mChannelsPerFrame = channels
+            asbd.mBytesPerFrame = (asbd.mBitsPerChannel / 8) * channels
+            asbd.mBytesPerPacket = asbd.mBytesPerFrame * asbd.mFramesPerPacket
+            return (asbd, kAudioFileCAFType)
 
         case .aac:
             // AAC in an M4A container
