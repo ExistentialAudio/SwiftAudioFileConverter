@@ -142,7 +142,7 @@ extension AudioFileConverter {
             asbd.mChannelsPerFrame = channels
             asbd.mBytesPerFrame = (asbd.mBitsPerChannel / 8) * channels
             asbd.mBytesPerPacket = asbd.mBytesPerFrame * asbd.mFramesPerPacket
-            return (asbd, kAudioFileWAVEType)
+            return (asbd, kAudioFileRF64Type)
 
         case .aiff:
             // AIFF -> Linear PCM
